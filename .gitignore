@@ -1,0 +1,96 @@
+# ============================================================
+#  .gitignore — Projeto Inteligência Comercial
+#  Felipe Huff | github.com/felipehuff610
+# ============================================================
+
+# ── Dados gerados (não sobem pro GitHub) ─────────────────────
+# Os CSVs são gerados localmente via gerar_dados.py
+# Quem clonar o repo roda o script e gera os próprios dados
+dados/brutos/
+dados/processados/
+
+# Mas manter a estrutura de pastas no repo
+!dados/brutos/.gitkeep
+!dados/processados/.gitkeep
+
+# ── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Ambientes virtuais
+venv/
+.venv/
+env/
+ENV/
+.env
+
+# Distribuição / empacotamento
+build/
+dist/
+*.egg-info/
+*.egg
+
+# ── Jupyter Notebook ─────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── IDEs e editores ──────────────────────────────────────────
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / JetBrains
+.idea/
+*.iml
+
+# Spyder
+.spyderproject.cfg
+.spyproject/
+
+# ── Sistema operacional ───────────────────────────────────────
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+
+# ── Arquivos temporários e logs ───────────────────────────────
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# ── Power BI ─────────────────────────────────────────────────
+# Arquivos de cache do Power BI Desktop
+*.pbix.lock
+Microsoft.Mashup.Container*/
+
+# Manter o .pbix no repo (é o dashboard)
+!dashboard/*.pbix
+
+# ── Segurança — NUNCA subir isso ─────────────────────────────
+.env
+*.env
+.env.*
+secrets.py
+config_local.py
+credentials.json
+token.json
+*.pem
+*.key
