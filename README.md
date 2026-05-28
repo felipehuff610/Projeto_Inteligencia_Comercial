@@ -157,7 +157,7 @@ Os arquivos em `sql/` foram escritos com sintaxe SQLite (compatível com DB Brow
 
 Feito por **Felipe Huff** — Analista de Dados & Desenvolvedor.
 
-[![LinkedIn](https://www.linkedin.com/in/felipe-huff-1b411327b/)
+[[![LinkedIn] (https://www.linkedin.com/in/felipe-huff-1b411327b/)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=flat-square&logo=github)](https://github.com/felipehuff610)
 
 ---
