@@ -26,7 +26,7 @@ O objetivo não é só responder às perguntas — é construir um pipeline que 
 
 ---
 
-## 🔍 Perguntas respondidas
+## Perguntas respondidas
 
 | # | Pergunta de negócio | Arquivo |
 |---|---|---|
@@ -80,7 +80,7 @@ Projeto_Inteligencia_Comercial/
 
 ---
 
-## 📊 Principais insights
+##  Principais insights
 
 A análise de 2 anos revelou alguns padrões importantes:
 
@@ -94,9 +94,9 @@ A análise de 2 anos revelou alguns padrões importantes:
 
 ---
 
-## ⚙️ Como executar
+## Como executar
 
-### Pré-requisitos
+###Pré-requisitos:
 
 ```bash
 git clone https://github.com/felipehuff610/Projeto_Inteligencia_Comercial.git
@@ -119,16 +119,13 @@ python notebooks/02_analise_exploratoria.py
 # 4. Calcular métricas de clientes (RFM, inativos, potencial)
 python notebooks/03_metricas_clientes.py
 ```
-
-> 💡 **Dica:** Os scripts Python têm marcações `# %%` compatíveis com Jupyter. Para rodar como notebook, instale `jupytext` e execute `jupytext --to notebook notebooks/01_limpeza_tratamento.py`.
-
 ### SQL
 
 Os arquivos em `sql/` foram escritos com sintaxe SQLite (compatível com DB Browser for SQLite). Para PostgreSQL, substituir `JULIANDAY()` por `DATE_PART('day', ...)` e `STRFTIME()` por `EXTRACT()`.
 
 ---
 
-## 🛠️ Stack utilizada
+## Stack utilizada
 
 | Ferramenta | Uso |
 |---|---|
@@ -160,7 +157,7 @@ Os arquivos em `sql/` foram escritos com sintaxe SQLite (compatível com DB Brow
 
 Feito por **Felipe Huff** — Analista de Dados & Desenvolvedor.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](https://linkedin.com/in/felipehuff610)
+[[![LinkedIn] (https://www.linkedin.com/in/felipe-huff-1b411327b/)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=flat-square&logo=github)](https://github.com/felipehuff610)
 
 ---
