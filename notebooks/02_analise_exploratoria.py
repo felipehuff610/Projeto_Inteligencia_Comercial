@@ -11,6 +11,7 @@
 import os
 import warnings
 
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import numpy as np
@@ -19,7 +20,22 @@ import seaborn as sns
 
 warnings.filterwarnings("ignore")
 
-BASE            = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+def _achar_raiz(inicio, marcador="requirements.txt"):
+    """Sobe pastas ate encontrar o marcador - funciona de qualquer subpasta."""
+    atual = os.path.abspath(inicio)
+    for _ in range(8):
+        if os.path.isfile(os.path.join(atual, marcador)):
+            return atual
+        pai = os.path.dirname(atual)
+        if pai == atual:
+            break
+        atual = pai
+    raise FileNotFoundError(
+        "Raiz do projeto nao encontrada. "
+        "Certifique-se de que requirements.txt existe na pasta raiz."
+    )
+
+BASE = _achar_raiz(os.path.dirname(os.path.abspath(__file__)))
 DIR_PROCESSADOS = os.path.join(BASE, "dados", "processados")
 DIR_GRAFICOS    = os.path.join(BASE, "dashboard", "graficos_eda")
 os.makedirs(DIR_GRAFICOS, exist_ok=True)

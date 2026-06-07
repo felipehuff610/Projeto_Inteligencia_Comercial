@@ -13,13 +13,29 @@
 import os
 import warnings
 
+
 import numpy as np
 import pandas as pd
 
 warnings.filterwarnings("ignore")
 
 # caminhos
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+def _achar_raiz(inicio, marcador="requirements.txt"):
+    """Sobe pastas ate encontrar o marcador - funciona de qualquer subpasta."""
+    atual = os.path.abspath(inicio)
+    for _ in range(8):
+        if os.path.isfile(os.path.join(atual, marcador)):
+            return atual
+        pai = os.path.dirname(atual)
+        if pai == atual:
+            break
+        atual = pai
+    raise FileNotFoundError(
+        "Raiz do projeto nao encontrada. "
+        "Certifique-se de que requirements.txt existe na pasta raiz."
+    )
+
+BASE = _achar_raiz(os.path.dirname(os.path.abspath(__file__)))
 DIR_BRUTOS      = os.path.join(BASE, "dados", "brutos")
 DIR_PROCESSADOS = os.path.join(BASE, "dados", "processados")
 os.makedirs(DIR_PROCESSADOS, exist_ok=True)
