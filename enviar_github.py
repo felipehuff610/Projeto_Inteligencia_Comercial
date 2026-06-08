@@ -57,19 +57,29 @@ def cor(texto: str, codigo: str) -> str:
 
 def linha(char: str = "─", tamanho: int = 60) -> None:
     print(char * tamanho)
+
+
 def titulo(texto: str) -> None:
     linha()
     print(cor(f"  {texto}", "bold"))
     linha()
 
+
 def ok(msg: str) -> None:
     print(cor(f"  ✓  {msg}", "verde"))
+
+
 def info(msg: str) -> None:
     print(cor(f"  →  {msg}", "ciano"))
+
+
 def aviso(msg: str) -> None:
     print(cor(f"  ⚠  {msg}", "amarelo"))
+
+
 def erro(msg: str) -> None:
     print(cor(f"  ✗  {msg}", "vermelho"))
+
 
 def rodar(comando: list[str], capturar: bool = False) -> subprocess.CompletedProcess:
     """Executa um comando shell e retorna o resultado."""
@@ -81,10 +91,13 @@ def rodar(comando: list[str], capturar: bool = False) -> subprocess.CompletedPro
     )
     return resultado
 
+
 def git(*args, capturar: bool = False) -> subprocess.CompletedProcess:
     return rodar(["git"] + list(args), capturar=capturar)
 
+
 # ── verificações ───────────────────────────────────────────────────────────────
+
 def verificar_git() -> bool:
     """Checa se o Git está instalado e acessível."""
     resultado = rodar(["git", "--version"], capturar=True)
@@ -98,6 +111,7 @@ def verificar_git() -> bool:
         print("  Instale o Git em: https://git-scm.com/downloads")
         print("  Depois reinicie este script.")
         return False
+
 
 def verificar_config_git() -> bool:
     """Verifica se nome e e-mail estão configurados no Git."""
@@ -114,7 +128,10 @@ def verificar_config_git() -> bool:
         print(cor('    git config --global user.name  "Felipe Huff"',       "ciano"))
         print(cor('    git config --global user.email "seu@email.com"',     "ciano"))
         return False
+
+
 # ── operações Git ──────────────────────────────────────────────────────────────
+
 def inicializar_repo() -> None:
     """Inicializa o repositório Git se ainda não existir."""
     git_dir = os.path.join(PROJECT_DIR, ".git")
@@ -126,6 +143,7 @@ def inicializar_repo() -> None:
         git("init")
         git("checkout", "-b", BRANCH)
         ok("Repositório inicializado")
+
 
 def configurar_remote() -> None:
     """Adiciona ou atualiza o remote 'origin'."""
@@ -143,11 +161,13 @@ def configurar_remote() -> None:
         git("remote", "add", "origin", REPO_URL)
         ok("Remote adicionado")
 
+
 def listar_arquivos_staging() -> list[str]:
     """Retorna a lista de arquivos que serão enviados."""
     resultado = git("status", "--short", capturar=True)
     linhas = [l for l in resultado.stdout.strip().split("\n") if l.strip()]
     return linhas
+
 
 def fazer_commit(mensagem: str) -> bool:
     """Adiciona todos os arquivos e faz o commit."""

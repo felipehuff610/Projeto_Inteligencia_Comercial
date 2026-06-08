@@ -1,8 +1,12 @@
 """
-Dashboard Central — Inteligência Comercial:
+Dashboard Central — Inteligência Comercial
+==========================================
 Gera um único PNG (20×28") com todos os gráficos do projeto
 organizados em seções: EDA → Produtos → RFM → Cohort
+
+Autor: Felipe Huff | github.com/felipehuff610
 """
+
 import os
 import warnings
 
@@ -14,12 +18,14 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib.patches import FancyBboxPatch
+
 warnings.filterwarnings("ignore")
+
 # ── paths ──────────────────────────────────────────────────────────────────────
 def _achar_raiz(inicio: str, marcador: str = "requirements.txt") -> str:
     """
     Sobe a árvore de pastas até encontrar o arquivo marcador.
-    Funciona independentemente de onde o script estiver.
+    Funciona independentemente de onde o script estiver salvo dentro do projeto.
     """
     atual = os.path.abspath(inicio)
     for _ in range(8):

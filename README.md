@@ -20,13 +20,21 @@ Esse projeto nasceu de uma pergunta simples que todo time comercial deveria esta
 
 > *"Estamos crescendo — mas pra quem? E quem sumiu?"*
 
-A partir de dados sintéticos de um e-commerce brasileiro de médio porte (500 clientes, 6.200 pedidos, 2 anos de histórico), construí uma stack analítica completa: geração de dados com Python, limpeza e métricas com Pandas, queries analíticas em SQL e visualização executiva no Power BI.
+A partir de dados sintéticos de um e-commerce brasileiro de médio porte (500 clientes, 6.200 pedidos, 2 anos de histórico), construí uma stack analítica completa: geração de dados com Python, limpeza e métricas com Pandas, queries analíticas em SQL, análise de cohort e visualização centralizada num dashboard gerado em Python.
 
 O objetivo não é só responder às perguntas — é construir um pipeline que possa ser adaptado pra qualquer base de dados real com poucos ajustes.
 
 ---
 
-## Perguntas respondidas
+## 📊 Dashboard central
+
+> Todos os gráficos do projeto reunidos em uma única tela — gerado automaticamente pelo script `dashboard/dashboard_central.py`.
+
+![Dashboard Central](dashboard/dashboard_central.png)
+
+---
+
+## 🔍 Perguntas respondidas
 
 | # | Pergunta de negócio | Arquivo |
 |---|---|---|
@@ -37,6 +45,9 @@ O objetivo não é só responder às perguntas — é construir um pipeline que 
 | 5 | Como segmentar clientes por RFM? | `sql/05_rfm_segmentacao.sql` |
 | 6 | Qual região está crescendo e qual está em queda? | `sql/06_regioes_performance.sql` |
 | 7 | Quem tem potencial de crescimento mas compra pouco? | `notebooks/03_metricas_clientes.py` |
+| 8 | Qual % de clientes retorna após a primeira compra? | `notebooks/04_analise_cohort.py` |
+| 9 | Cohorts de Black Friday retêm diferente dos demais? | `notebooks/04_analise_cohort.py` |
+| 10 | Qual trimestre gerou os clientes com maior LTV? | `notebooks/04_analise_cohort.py` |
 
 ---
 
@@ -46,57 +57,73 @@ O objetivo não é só responder às perguntas — é construir um pipeline que 
 Projeto_Inteligencia_Comercial/
 │
 ├── dados/
-│   ├── brutos/                  # CSVs gerados pelo script Python
+│   ├── brutos/                     # CSVs gerados pelo script Python
 │   │   ├── clientes.csv
 │   │   ├── pedidos.csv
 │   │   ├── produtos.csv
 │   │   ├── vendedores.csv
 │   │   └── metas.csv
-│   ├── processados/             # Dados limpos e enriquecidos
+│   ├── processados/                # Dados limpos, enriquecidos e prontos pro BI
 │   │   ├── pedidos_analitico.csv
 │   │   ├── rfm_clientes.csv
-│   │   └── clientes_inativos.csv
-│   └── gerar_dados.py           # Geração de dados sintéticos (Faker)
+│   │   ├── clientes_inativos.csv
+│   │   ├── cohort_retencao.csv
+│   │   └── cohort_ltv.csv
+│   └── gerar_dados.py              # Geração sintética com Faker (pt_BR)
 │
 ├── notebooks/
 │   ├── 01_limpeza_tratamento.py    # Pipeline de limpeza e validação
-│   ├── 02_analise_exploratoria.py  # EDA com visualizações
-│   └── 03_metricas_clientes.py     # RFM, inativos, potencial de crescimento
+│   ├── 02_analise_exploratoria.py  # EDA com 6 visualizações
+│   ├── 03_metricas_clientes.py     # RFM, inativos, potencial, meta × realizado
+│   └── 04_analise_cohort.py        # Cohort: retenção, curva YoY, LTV acumulado
 │
 ├── sql/
-│   ├── 01_clientes_inativos.sql
-│   ├── 02_ticket_medio_cliente.sql
-│   ├── 03_meta_vs_realizado.sql
-│   ├── 04_produtos_curva_abc.sql
-│   ├── 05_rfm_segmentacao.sql
-│   └── 06_regioes_performance.sql
+│   ├── 01_clientes_inativos.sql    # Inativos por grau e segmento
+│   ├── 02_ticket_medio_cliente.sql # Ticket com percentis e benchmark
+│   ├── 03_meta_vs_realizado.sql    # Meta × realizado com ranking e semáforo
+│   ├── 04_produtos_curva_abc.sql   # Curva ABC com share acumulado
+│   ├── 05_rfm_segmentacao.sql      # RFM completo em SQL puro
+│   └── 06_regioes_performance.sql  # Crescimento YoY por região
 │
-├── dashboard/                   # Arquivos do Power BI + prints
-│   └── graficos_eda/            # Visualizações geradas pelos notebooks
+├── dashboard/
+│   ├── dashboard_central.py        # Gera o dashboard unificado (PNG)
+│   ├── dashboard_central.png       # Imagem final — 3000 × 4200 px
+│   ├── graficos_eda/               # Gráficos individuais da EDA
+│   ├── graficos_clientes/          # Gráficos de RFM e métricas
+│   ├── graficos_cohort/            # Heatmap, curva de retenção, LTV
+│   └── powerbi/
+│       ├── 01_guia_modelo_dados.md # Conexão e relacionamentos no Power BI
+│       ├── 02_medidas_dax.md       # 35 medidas DAX organizadas por bloco
+│       └── 03_layout_dashboards.md # Wireframes e especificações visuais
 │
+├── enviar_github.py                # Push automático com interface no terminal
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-##  Principais insights
+## 💡 Principais insights
 
-A análise de 2 anos revelou alguns padrões importantes:
+A análise de 2 anos revelou padrões que qualquer time comercial precisa acompanhar:
 
-**Clientes inativos representam 27% da base** — a maioria no segmento Bronze, mas os de maior risco financeiro são os Ouro e Diamante (maior receita histórica, maior custo de substituição).
+**27% da base está inativa** — a maioria é Bronze, mas os de maior risco financeiro são os segmentos Ouro e Diamante: receita histórica alta, custo de reativação alto.
 
-**A Curva ABC dos produtos** mostrou que apenas 6 SKUs respondem por ~50% da receita. Todos são Eletrônicos — categoria com maior ticket, mas menor margem percentual.
+**6 SKUs = 50% da receita** — todos Eletrônicos. Categoria com maior ticket, mas menor margem percentual. A Curva ABC evidencia a dependência da empresa nesse grupo.
 
-**Sazonalidade marcante**: novembro (Black Friday) e dezembro (Natal) juntos representam ~30% da receita anual. Janeiro e fevereiro despencam — uma oportunidade clara pra campanhas de retenção no começo do ano.
+**Retenção no mês 1 fica em ~32%** — o que significa que 68% dos clientes não voltam a comprar no primeiro mês após a compra inicial. O heatmap de cohort torna esse número impossível de ignorar.
 
-**O canal Site + App Mobile** concentra 65% dos pedidos, mas o WhatsApp, apesar de 10% do volume, tem o maior ticket médio — sinal de que vendas consultivas convertem melhor.
+**Black Friday retém diferente** — cohorts adquiridos em novembro apresentam padrão de retenção distinto dos demais. Clientes de promoção têm perfil de fidelidade próprio.
+
+**Sazonalidade define o ano** — novembro e dezembro representam ~30% da receita anual. Janeiro e fevereiro desabam. A janela de campanha de retenção ideal é exatamente fevereiro.
+
+**WhatsApp tem o maior ticket médio** — com apenas 10% do volume, supera o Site em ticket. Vendas consultivas convertem mais valor por pedido.
 
 ---
 
-## Como executar
+## ⚙️ Como executar
 
-###Pré-requisitos:
+### Pré-requisitos
 
 ```bash
 git clone https://github.com/felipehuff610/Projeto_Inteligencia_Comercial.git
@@ -107,49 +134,72 @@ pip install -r requirements.txt
 ### Passo a passo
 
 ```bash
-# 1. Gerar os dados sintéticos
+# 1. Gerar os dados sintéticos (500 clientes, 6.200 pedidos, 2 anos)
 python dados/gerar_dados.py
 
-# 2. Limpar e tratar os dados
+# 2. Limpar, validar e enriquecer os dados
 python notebooks/01_limpeza_tratamento.py
 
-# 3. Rodar a análise exploratória (gera gráficos em dashboard/graficos_eda/)
+# 3. Análise exploratória — gráficos em dashboard/graficos_eda/
 python notebooks/02_analise_exploratoria.py
 
-# 4. Calcular métricas de clientes (RFM, inativos, potencial)
+# 4. Métricas de clientes — RFM, inativos, potencial, meta × realizado
 python notebooks/03_metricas_clientes.py
+
+# 5. Análise de cohort — retenção, curva YoY, LTV acumulado
+python notebooks/04_analise_cohort.py
+
+# 6. Gerar o dashboard central unificado
+python dashboard/dashboard_central.py
 ```
+
+> 💡 Os scripts têm marcações `# %%` compatíveis com Jupyter. Para rodar como notebook:
+> ```bash
+> pip install jupytext
+> jupytext --to notebook notebooks/04_analise_cohort.py
+> ```
+
 ### SQL
 
-Os arquivos em `sql/` foram escritos com sintaxe SQLite (compatível com DB Browser for SQLite). Para PostgreSQL, substituir `JULIANDAY()` por `DATE_PART('day', ...)` e `STRFTIME()` por `EXTRACT()`.
+Os arquivos em `sql/` usam sintaxe SQLite — compatíveis com [DB Browser for SQLite](https://sqlitebrowser.org).
+Para PostgreSQL: substituir `JULIANDAY()` por `DATE_PART('day', ...)` e `STRFTIME()` por `EXTRACT()`.
+
+### Envio automático pro GitHub
+
+```bash
+python enviar_github.py
+```
+
+Interface interativa no terminal: inicializa o repositório, configura o remote, faz commit e push em um único comando.
 
 ---
 
-## Stack utilizada
+## 🛠️ Stack utilizada
 
 | Ferramenta | Uso |
 |---|---|
-| **Python 3.11** | Geração de dados, limpeza, análise |
-| **Pandas** | Manipulação e transformação de dados |
+| **Python 3.11** | Geração de dados, limpeza, análise, dashboard |
+| **Pandas** | Manipulação, transformação e agregação |
 | **Matplotlib + Seaborn** | Visualizações com paleta customizada |
-| **Faker (pt_BR)** | Geração de dados sintéticos realistas |
-| **SQL (SQLite/PostgreSQL)** | Queries analíticas com CTEs e Window Functions |
-| **Power BI** | Dashboard executivo (em desenvolvimento) |
+| **Faker (pt_BR)** | Dados sintéticos realistas com sazonalidade |
+| **SQL (SQLite / PostgreSQL)** | CTEs, Window Functions, RANK, NTILE |
+| **Power BI** | Modelo de dados, DAX, dashboards executivos |
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] Geração de dados sintéticos com Faker
-- [x] Pipeline de limpeza e tratamento
-- [x] Análise exploratória com visualizações
+- [x] Geração de dados sintéticos com Faker (pt_BR)
+- [x] Pipeline de limpeza e validação
+- [x] Análise exploratória com 6 visualizações
 - [x] Segmentação RFM de clientes
-- [x] Queries SQL analíticas (CTE + Window Functions)
-- [ ] Dashboard Power BI — executivo
-- [ ] Dashboard Power BI — vendedores
-- [ ] Dashboard Power BI — clientes
-- [ ] Análise de cohort de clientes
-- [ ] Modelo preditivo de churn
+- [x] Queries SQL analíticas — CTE + Window Functions
+- [x] Análise de cohort — retenção, curva YoY, LTV
+- [x] Dashboard central unificado (Python → PNG)
+- [x] Guia Power BI — modelo de dados e 35 medidas DAX
+- [ ] Dashboards Power BI — Executivo, Vendedores, Clientes
+- [ ] Previsão de demanda com Prophet
+- [ ] Modelo de churn com Random Forest + SHAP
 
 ---
 
@@ -157,7 +207,7 @@ Os arquivos em `sql/` foram escritos com sintaxe SQLite (compatível com DB Brow
 
 Feito por **Felipe Huff** — Analista de Dados & Desenvolvedor.
 
-[[![LinkedIn] (https://www.linkedin.com/in/felipe-huff-1b411327b/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/felipe-huff-1b411327b/)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=flat-square&logo=github)](https://github.com/felipehuff610)
 
 ---
